@@ -1,0 +1,28 @@
+{
+  "name": "icebreaker-3d",
+  "version": "1.2.0",
+  "description": "Interactive 3D Ligne Claire polar icebreaker voyage built with Three.js, custom GLSL 3D Kelvin wake & cel-shading shaders, exact 2D SAT rigid-body broken ice, and heavy displacement physics (ZH / EN / PT).",
+  "type": "module",
+  "license": "MIT",
+  "keywords": [
+    "threejs",
+    "webgl",
+    "glsl",
+    "ligne-claire",
+    "cel-shading",
+    "icebreaker",
+    "procedural",
+    "interactive-3d"
+  ],
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "vite": "^7.2.2"
+  }
+}
