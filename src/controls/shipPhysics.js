@@ -58,6 +58,7 @@ export class ShipPhysics {
     this.shudderPhase = 0;
     this.reboundCooldown = 0;
     this.shoulderCooldown = 0;
+    this.openWaterTime = 0;
     this._impactSign = 1;
     this._pendingImpactEvent = null; // Consumed by IceWorld to chip shards right at contact point
     this._time = 0;
@@ -250,6 +251,10 @@ export class ShipPhysics {
     const maxReverse = 2.6;
     const yieldThreshold = 0.34; // Minimum effective breaking force to fracture solid pack ice!
 
+    if (inOpenWater) {
+      this.openWaterTime = Math.min(5.0, this.openWaterTime + clampedDt);
+    }
+
     const bowHitFreshIce = bowInIce > 0.52 && !this.wasBowInIce;
     let climbTarget = 0;
     let lowSpeedPressing = false;
@@ -271,14 +276,17 @@ export class ShipPhysics {
         this.pendingReboundSpeed = -Math.min(0.58, 0.20 + impactSpeed * 0.28);
         this.iceStress = 0.85;
         this.reboundCooldown = 0.85;
-      } else {
-        // HIGH-SPEED / HIGH-THRUST RAMMING IMPACT: Dramatic momentum check + bow climbs & shatters ice!
+      } else if (this.openWaterTime > 0.65) {
+        // HIGH-SPEED / HIGH-THRUST OPEN-WATER RAMMING IMPACT: Dramatic momentum check + bow climbs & shatters ice!
         const ramStrength = Math.min(1.15, 0.56 + impactSpeed * 0.14);
         this._triggerIceImpact(ramStrength, 'ram', 0);
         this.speed *= (0.54 + Math.min(0.16, thrustPower * 0.16));
         this.iceBreakProgress = Math.max(this.iceBreakProgress, 0.62);
         this.reboundCooldown = 0.60;
       }
+    }
+    if (bowInIce > 0.52) {
+      this.openWaterTime = 0;
     }
     this.wasBowInIce = bowInIce > 0.52;
 
